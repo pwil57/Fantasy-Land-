@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Select League of Your Team
+{% endblock %}
+
+{% block main %}
+
+<form action="/leagueselect2" method="post">
+        <div class="form-group">
+            <select class="form-control" name="league">
+                <option disabled selected value="">Leagues</option>
+                {% for row in league %}
+                    <option value="{{ row.id }}">{{ row.league_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button class="btn btn-primary" type="submit">Select</button>
+    </form>
+
+{% endblock %}

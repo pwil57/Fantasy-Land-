@@ -1,0 +1,67 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Players
+{% endblock %}
+{% block main %}
+ <form action='/players' method='post'>
+        <div class='form-group'>
+            <select name=stat class='form-control'>
+            <option disabled selected value=''>Sort by</option>
+            <option value='salaryasc'>salary – low to high</option>
+            <option value='salarydesc'>salary – high to low</option>
+            <option value='points'>Points per game</option>
+        </select>
+        </div>
+        <!--<div class='form-group'>-->
+        <!--    <input autocomplete='off' autofocus class='form-control' name='shares' placeholder='Shares' type='text'>-->
+        <!--</div>-->
+    <button class='btn btn-primary' type='submit'>Sort</button>
+</form>
+
+<p></p>
+
+<p>CASH: ${{ cash }}</p>
+
+<div class='section'>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Name</th>
+                <th>Position</th>
+                <th>Team</th>
+                <th>Points</th>
+                <th>Assists</th>
+                <th>Rebounds</th>
+                <th>Steals</th>
+                <th>Blocks</th>
+                <th>Turnovers</th>
+                <th>Salary</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for row in stats %}
+        <form action="/add" method="post">
+            <tr>
+                <td><button class="btn btn-primary" name="id" value="{{ row['player_id'] }}"type="submit">Add</button></td>
+                <td>{{ row['name'] }} </td>
+                <td>{{ row['position'] }}</td>
+                <td>{{ row['team'] }}</td>
+                <td>{{ row['points'] }}</td>
+                <td>{{ row['assists'] }}</td>
+                <td>{{ row['rebounds'] }}</td>
+                <td>{{ row['steals'] }}</td>
+                <td>{{ row['blocks'] }}</td>
+                <td>{{ row['turnovers'] }}</td>
+                <td>${{ row['salary'] }}</td>
+            </tr>
+
+        {% endfor %}
+        </form>
+        </tbody>
+    </table>
+</div>
+
+
+{% endblock %}

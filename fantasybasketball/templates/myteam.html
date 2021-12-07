@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    My Team
+{% endblock %}
+
+{% block main %}
+
+<h1>My Team</h1>
+<h6>Fantasy Points = Points + 2*Assists + 2*Rebounds + 2*Steals + 2*Blocks - 2*Turnovers</h6>
+
+<form action='/update' method='post'>
+    <button class='btn btn-primary' name=update value='update'>Update</button>
+</form>
+
+<p></p>
+
+        <thead>
+            <table>
+              <tr>
+                <th></th>
+                <th>Position</th>
+                <th>Player</th>
+                <th>Fantasy Points</th>
+              </tr>
+        </thead>
+
+
+        <tbody>
+            {% for row in myteam %}
+            <form action="/delete" method="post">
+                <tr>
+                    <td><button class="btn btn-primary" name="id" value="{{ row.player_id }}"type="submit">Drop</button></td>
+                    <td>{{ row.position }}</td>
+                    <td>{{ row.name }}</td>
+                    <td>{{ points[row.name] }}</td>
+                </tr>
+            {% endfor %}
+            </form>
+                <tr>
+                    <td><b>TOTAL</b></td>
+                    <td></td>
+                    <td></td>
+                    <td><b>{{ total }}</b></td>
+                </tr>
+
+                <tr>
+                    <td><b>CASH</b></td>
+                    <td></td>
+                    <td></td>
+                    <td><b>${{ cash }}</b></td>
+                </tr>
+        </tbody>
+
+        </table>
+
+
+
+
+
+
+
+{% endblock %}

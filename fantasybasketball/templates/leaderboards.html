@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Leaderboards
+{% endblock %}
+
+{% block main %}
+
+<h1>Leaderboards</h1>
+
+
+        <table>
+          <tr>
+            <th>Team</th>
+            <th>Fantasy Points</th>
+          </tr>
+
+        <tbody>
+            {% for row in standings %}
+                <tr>
+                    <td>{{ row.username }}</td>
+                    <td>{{ row.fantasy_points }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+
+
+        </table
+
+
+{% endblock %}

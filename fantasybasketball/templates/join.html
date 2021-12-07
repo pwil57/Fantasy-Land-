@@ -1,0 +1,44 @@
+
+{% extends "layout.html" %}
+
+{% block title %}
+    Join League
+{% endblock %}
+
+{% block main %}
+
+    <form action="/join" method="post">
+        <div class="form-group">
+            <select class="form-control" name="symbol">
+                <option disabled selected value="">Leagues</option>
+                {% for row in league %}
+                    <option value="{{ row.league_name }}">{{ row.league_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button class="btn btn-primary" type="submit">Join</button>
+    </form>
+
+<p></p>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>League Name</th>
+                <th>Current Number of Teams</th>
+                <th>Maximum Number of Teams</th>
+            </tr>
+        </thead>
+
+
+        <tbody>
+            {% for row in league %}
+                <tr>
+                    <td>{{ row.league_name }}</td>
+                    <td>{{ row.league_current }}</td>
+                    <td>{{ row.league_max }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
