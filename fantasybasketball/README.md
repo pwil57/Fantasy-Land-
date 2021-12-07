@@ -1,5 +1,5 @@
 
-This is Peter and Tahmid’s CS50 final project. This final project is a fantasy basketball website made using Flask. To compile this project, one simply needs to change his directory to the CS50 final project and run flask run in his console. This will thus allow the user to open the website on his server and view the site. To configure the project, a user can edit the .html files, .css file, and .py files. The data for this website is sourced from balldontlie.io and data was stored in sqlite databases. The project also lives in the CS50 IDE.
+This is Peter's fantasy basketball project for my introductory computer science class. This project is a fantasy basketball website made using Flask. To configure the project, a user can edit the .html files, .css file, and .py files. The data for this website is sourced from balldontlie.io and data was stored in sqlite databases. The project also lives in the CS50 IDE.
 
 Once the site opens on the user’s server, the user is brought to a login page. If the user already has an account, the user can log in. However, if the user does not have an account, the user can click on register on the top left to make an account. Once the user makes an account, the user makes an account, the user can now log in.
 
@@ -11,5 +11,4 @@ After buying the players the user wants, the user can then see how his team is d
 
 Moreover, the user can click on “Leaderboards” and select the league he is in to see the standings of the league selected. It is ranked by total fantasy points.
 
-Youtube url: https://youtu.be/vM8ubeGnkL8
 
