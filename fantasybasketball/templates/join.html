@@ -7,19 +7,8 @@
 
 {% block main %}
 
-    <form action="/join" method="post">
-        <div class="form-group">
-            <select class="form-control" name="symbol">
-                <option disabled selected value="">Leagues</option>
-                {% for row in league %}
-                    <option value="{{ row.league_name }}">{{ row.league_name }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <button class="btn btn-primary" type="submit">Join</button>
-    </form>
 
-<p></p>
+
 
     <table class="table table-striped">
         <thead>
@@ -27,18 +16,22 @@
                 <th>League Name</th>
                 <th>Current Number of Teams</th>
                 <th>Maximum Number of Teams</th>
+                <th> Join </th>
             </tr>
         </thead>
 
 
         <tbody>
             {% for row in league %}
+            <form action="/join" method="post">
                 <tr>
-                    <td>{{ row.league_name }}</td>
-                    <td>{{ row.league_current }}</td>
-                    <td>{{ row.league_max }}</td>
+                    <td>{{ row[1] }}</td>
+                    <td>{{ row[2] }}</td>
+                    <td>{{ row[3] }}</td>
+                    <td> <button class="btn btn-primary" name="symbol" value="{{ row[1] }}"type="submit">Join</button></td>
                 </tr>
             {% endfor %}
+        </form>
         </tbody>
     </table>
 {% endblock %}

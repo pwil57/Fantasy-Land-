@@ -5,9 +5,10 @@ import json
 from datetime import date
 from flask import redirect, render_template, request, session
 from functools import wraps
-from cs50 import SQL
+import _sqlite3
 
-db = SQL("sqlite:///basketball.db")
+conn = _sqlite3.connect("basketball.db")
+db = conn.cursor()
 
 # Apology helper function
 
@@ -52,8 +53,8 @@ def player_stats():
         # this is how we got the initial players for our database
         player_ids = db.execute("SELECT id FROM players")
         # print(len(player_ids))
-        for i in range(len(player_ids)):
-            ids.append(player_ids[i]['id'])
+        for i in range(len(player_ids.fetchall())):
+            ids.append(player_ids[i][0])
             # print(ids)
         # player_ids = db.execute("SELECT id FROM players SORT BY ?",  )
         # print(ids[0])
@@ -77,7 +78,7 @@ def player_stats():
 def lookup():
     ids = []
     try:
-        player_ids = db.execute("SELECT id FROM players")
+        player_ids = db.execute("SELECT id FROM players").fetchall()
         # print(player_ids)
         today = date.today()
         # this was used for our demo and the model we left in
@@ -88,7 +89,7 @@ def lookup():
         # string = f'per_page=100&dates={today}'
         # API call getting all player stats in our db;
         for i in range(len(player_ids)):
-            string += f"&player_ids[]={player_ids[i]['id']}"
+            string += f"&player_ids[]={player_ids[i][0]}"
             query = 'https://www.balldontlie.io/api/v1/stats?' + string
             url = f"{query}"
             # print(url)
@@ -112,9 +113,9 @@ def lookup():
         for j in range(100):
             # print(ids[i]['data'][j]['player']['id'])
             db.execute("INSERT INTO fantasy_points (player_id, total_points, game_id) VALUES (?,?,?)",
-                       ids[i]['data'][j]['player']['id'], ids[i]['data'][j]['pts'] + (2 * ids[i]['data'][j]['ast']) +
+                       (ids[i]['data'][j]['player']['id'], (ids[i]['data'][j]['pts'] + (2 * ids[i]['data'][j]['ast']) +
                        (2 * ids[i]['data'][j]['reb']) + (2 * ids[i]['data'][j]['stl']) + (2 * ids[i]['data'][j]['blk'])
-                       - (2 * ids[i]['data'][j]['turnover']), ids[i]['data'][j]['game']['id'])
+                       - (2 * ids[i]['data'][j]['turnover'])), ids[i]['data'][j]['game']['id']))
     # print(last_page)
     # iterate through last page of data
     # insert data into fantasy points
@@ -122,8 +123,9 @@ def lookup():
     for i in range(last_page):
         # print(ids[last]['data'][i]['pts'])
         db.execute("INSERT INTO fantasy_points (player_id, total_points, game_id) VALUES (?,?,?)",
-                   ids[last]['data'][i]['player']['id'], ids[last]['data'][i]['pts'] + (2 * ids[last]['data'][i]['ast']) +
+                   (ids[last]['data'][i]['player']['id'], (ids[last]['data'][i]['pts'] + (2 * ids[last]['data'][i]['ast']) +
                    (2 * ids[last]['data'][i]['reb']) + (2 * ids[last]['data'][i]['stl']) + (2 * ids[last]['data'][i]['blk'])
-                   - (2 * ids[last]['data'][i]['turnover']), ids[last]['data'][i]['game']['id'])
+                   - (2 * ids[last]['data'][i]['turnover'])), ids[last]['data'][i]['game']['id']))
+        conn.commit()
 
     return

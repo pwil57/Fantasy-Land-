@@ -30,10 +30,10 @@
             {% for row in myteam %}
             <form action="/delete" method="post">
                 <tr>
-                    <td><button class="btn btn-primary" name="id" value="{{ row.player_id }}"type="submit">Drop</button></td>
-                    <td>{{ row.position }}</td>
-                    <td>{{ row.name }}</td>
-                    <td>{{ points[row.name] }}</td>
+                    <td><button class="btn btn-primary" name="id" value="{{ row[0]}}"type="submit">Drop</button></td>
+                    <td>{{ row[3] }}</td>
+                    <td>{{ row[1]}}</td>
+                    <td>{{ points[row[1]] }}</td>
                 </tr>
             {% endfor %}
             </form>
@@ -45,7 +45,7 @@
                 </tr>
 
                 <tr>
-                    <td><b>CASH</b></td>
+                    <td><b>CASH REMAINING</b></td>
                     <td></td>
                     <td></td>
                     <td><b>${{ cash }}</b></td>
