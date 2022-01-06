@@ -2,7 +2,7 @@ import os
 import requests
 import urllib.parse
 import json
-from datetime import date
+import datetime
 from flask import redirect, render_template, request, session
 from functools import wraps
 import _sqlite3
@@ -80,13 +80,14 @@ def lookup():
     try:
         player_ids = db.execute("SELECT id FROM players").fetchall()
         # print(player_ids)
-        today = date.today()
+        today = datetime.date.today()
+        yesterday = today - datetime.timedelta(days=1)
         # this was used for our demo and the model we left in
         #Since we used a free API just be careful spamming update-only get a limited
         #number of calls per minute
-        string = 'per_page=100&start_date=2019-12-07&end_date=2019-12-12'
+        # string = 'per_page=100&start_date=2019-12-07&end_date=2019-12-12'
         # this commented line is what should update the games daily if you click update
-        # string = f'per_page=100&dates={today}'
+        string = f'per_page=100&start_date={yesterday}&end_date={today}'
         # API call getting all player stats in our db;
         for i in range(len(player_ids)):
             string += f"&player_ids[]={player_ids[i][0]}"
@@ -98,11 +99,14 @@ def lookup():
         # loop used to iterate through each page that the API brought back
         while True:
             url = f'https://www.balldontlie.io/api/v1/stats?page={page}' + '&' + string
+            # if requests.get(url) != None:
+            #     print(requests.get(url).json())
             response = requests.get(url).json()
-            ids.append(response)
-            if type(response['meta']['next_page']) != int:
-                last_page = response['meta']['total_count'] - ((response['meta']['current_page'] - 1) * 100)
-                break
+            if response:
+                ids.append(response)
+                if type(response['meta']['next_page']) != int:
+                    last_page = response['meta']['total_count'] - ((response['meta']['current_page'] - 1) * 100)
+                    break
             page += 1
         # print(ids)
     except requests.RequestException:
@@ -111,6 +115,7 @@ def lookup():
     # insert data into fantasy_points
     for i in range(len(ids) - 1):
         for j in range(100):
+            # if response:
             # print(ids[i]['data'][j]['player']['id'])
             db.execute("INSERT INTO fantasy_points (player_id, total_points, game_id) VALUES (?,?,?)",
                        (ids[i]['data'][j]['player']['id'], (ids[i]['data'][j]['pts'] + (2 * ids[i]['data'][j]['ast']) +
@@ -121,6 +126,7 @@ def lookup():
     # insert data into fantasy points
     last = response['meta']['current_page'] - 1
     for i in range(last_page):
+        # if response:
         # print(ids[last]['data'][i]['pts'])
         db.execute("INSERT INTO fantasy_points (player_id, total_points, game_id) VALUES (?,?,?)",
                    (ids[last]['data'][i]['player']['id'], (ids[last]['data'][i]['pts'] + (2 * ids[last]['data'][i]['ast']) +
